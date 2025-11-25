@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
-import 'placeholder_screen.dart'; // Import placeholder screen
-import 'choose.dart'; // Import choose screen for logout
+import 'placeholder_screen.dart'; 
+import 'choose.dart'; 
+import 'database_helper.dart'; 
+import 'create_report_screen.dart'; // IMPORT HALAMAN BUAT LAPORAN
 
 class WarningInfo {
   final String title;
@@ -32,8 +34,38 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final List<WarningInfo> warnings = [];
+  List<WarningInfo> warnings = [];
   int _selectedBottomNavIndex = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadReports();
+  }
+
+  Future<void> _loadReports() async {
+    // Mengambil data dari database
+    final reports = await DatabaseHelper().getReports();
+    
+    if (mounted) {
+      setState(() {
+        // Urutkan laporan terbaru di atas (berdasarkan ID atau logika lain jika ada timestamp real)
+        // Di sini kita pakai reversed agar yang baru diinput (ID besar) muncul di atas
+        final reversedReports = reports.reversed.toList();
+
+        // Konversi EmergencyReport (Database) ke WarningInfo (UI)
+        warnings = reversedReports.map((r) => WarningInfo(
+          title: r.reportType,
+          description: r.description,
+          timeAgo: r.timeAgo,
+          distance: r.distance,
+          icon: IconData(r.iconCodePoint, fontFamily: 'MaterialIcons'),
+          iconBackgroundColor: Color(r.iconBgColorValue),
+          borderColor: Color(r.statusColorValue),
+        )).toList();
+      });
+    }
+  }
 
   // Helper for navigation
   void _navigateToFeature(String title) {
@@ -43,6 +75,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
         builder: (context) => PlaceholderScreen(title: title),
       ),
     );
+  }
+
+  // Navigate to create report and refresh data on return
+  Future<void> _navigateToCreateReport() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CreateReportScreen(),
+      ),
+    );
+
+    // Jika result true (berarti sukses submit), refresh list
+    if (result == true) {
+      _loadReports();
+    }
   }
 
   @override
@@ -357,7 +404,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         GestureDetector(
           onTap: () {
             HapticFeedback.lightImpact();
-            _navigateToFeature('SOS Emergency');
+            _navigateToCreateReport(); // GANTI KE NAVIGASI FORM LAPORAN
           },
           child: Container(
             width: double.infinity,
