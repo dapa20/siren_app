@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:ui';
-import 'dashboard.dart'; // 1. IMPORTED THE DASHBOARD SCREEN
+import 'dashboard.dart';
+import 'responder_dashboard.dart'; // 1. IMPORT RESPONDER DASHBOARD
 
 class ChooseScreen extends StatelessWidget {
   const ChooseScreen({super.key});
@@ -135,17 +136,15 @@ class ChooseScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 32),
                         _buildRoleCard(
-                          context: context,
                           title: 'Warga',
                           icon: Icons.person_outline_rounded,
                           onTap: () {
                             HapticFeedback.lightImpact();
-                            // 2. ADDED NAVIGATION TO DASHBOARD
                             Navigator.of(context).pushReplacement(
                               PageRouteBuilder(
                                 pageBuilder: (context, animation,
                                         secondaryAnimation) =>
-                                    const DashboardScreen(), // Navigate to Dashboard
+                                    const DashboardScreen(),
                                 transitionsBuilder: (context, animation,
                                     secondaryAnimation, child) {
                                   return FadeTransition(
@@ -162,13 +161,28 @@ class ChooseScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 24),
                         _buildRoleCard(
-                          context: context,
                           title: 'Responder',
                           icon: Icons.local_hospital_outlined,
                           onTap: () {
                             HapticFeedback.lightImpact();
-                            // TODO: Navigate to Responder dashboard
-                            print("Responder card tapped");
+                            // 2. NAVIGATE TO RESPONDER DASHBOARD
+                            Navigator.of(context).pushReplacement(
+                              PageRouteBuilder(
+                                pageBuilder: (context, animation,
+                                        secondaryAnimation) =>
+                                    const ResponderDashboardScreen(),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  return FadeTransition(
+                                    opacity: animation.drive(
+                                        CurveTween(curve: Curves.easeIn)),
+                                    child: child,
+                                  );
+                                },
+                                transitionDuration:
+                                    const Duration(milliseconds: 300),
+                              ),
+                            );
                           },
                         ),
                         const SizedBox(height: 40),
@@ -185,7 +199,6 @@ class ChooseScreen extends StatelessWidget {
   }
 
   Widget _buildRoleCard({
-    required BuildContext context,
     required String title,
     required IconData icon,
     required VoidCallback onTap,

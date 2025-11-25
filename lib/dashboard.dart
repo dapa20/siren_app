@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
+import 'placeholder_screen.dart'; // Import placeholder screen
+import 'choose.dart'; // Import choose screen for logout
 
 class WarningInfo {
   final String title;
@@ -32,6 +34,16 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final List<WarningInfo> warnings = [];
   int _selectedBottomNavIndex = 1;
+
+  // Helper for navigation
+  void _navigateToFeature(String title) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PlaceholderScreen(title: title),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,50 +180,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ],
           ),
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                width: 42,
-                height: 42,
-                decoration: ShapeDecoration(
-                  color: const Color(0x99FFFFFF),
-                  shape: const OvalBorder(
-                    side: BorderSide(width: 1.16, color: Color(0x334ADEDE)),
+          GestureDetector(
+            onTap: () {
+              HapticFeedback.lightImpact();
+              _navigateToFeature('Notifikasi');
+            },
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: ShapeDecoration(
+                    color: const Color(0x99FFFFFF),
+                    shape: const OvalBorder(
+                      side: BorderSide(width: 1.16, color: Color(0x334ADEDE)),
+                    ),
                   ),
+                  child: const Icon(Icons.notifications_none_outlined,
+                      color: Color(0xFF1A2E35), size: 22),
                 ),
-                child: const Icon(Icons.notifications_none_outlined,
-                    color: Color(0xFF1A2E35), size: 22),
-              ),
-              Positioned(
-                right: -3,
-                top: -3,
-                child: Container(
-                  width: 16,
-                  height: 16,
-                  decoration: const ShapeDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment(0.50, 0.00),
-                      end: Alignment(0.50, 1.00),
-                      colors: [Color(0xFF4ADEDE), Color(0xFFA3E42F)],
+                Positioned(
+                  right: -3,
+                  top: -3,
+                  child: Container(
+                    width: 16,
+                    height: 16,
+                    decoration: const ShapeDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment(0.50, 0.00),
+                        end: Alignment(0.50, 1.00),
+                        colors: [Color(0xFF4ADEDE), Color(0xFFA3E42F)],
+                      ),
+                      shape: OvalBorder(
+                        side: BorderSide(width: 1.16, color: Colors.white),
+                      ),
                     ),
-                    shape: OvalBorder(
-                      side: BorderSide(width: 1.16, color: Colors.white),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '3',
-                      style: GoogleFonts.instrumentSans(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
+                    child: Center(
+                      child: Text(
+                        '3',
+                        style: GoogleFonts.instrumentSans(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -219,100 +237,106 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildProfileHeader() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(17),
-      decoration: ShapeDecoration(
-        color: const Color(0xB2FFFFFF),
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(width: 1.16, color: Color(0xCCFFFFFF)),
-          borderRadius: BorderRadius.circular(24),
-        ),
-        shadows: const [
-          BoxShadow(
-            color: Color(0x0C000000),
-            blurRadius: 6,
-            offset: Offset(0, 4),
-            spreadRadius: 0,
-          )
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: ShapeDecoration(
-              color: const Color(0xFFE0EBF0),
-              shape: RoundedRectangleBorder(
-                side:
-                    const BorderSide(width: 1.16, color: Color(0x4C4ADEDE)),
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: const Icon(
-                Icons.person_outline,
-                size: 40,
-                color: Color(0x99192D34),
-              ),
-            ),
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.lightImpact();
+        _navigateToFeature('Profil Pengguna');
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(17),
+        decoration: ShapeDecoration(
+          color: const Color(0xB2FFFFFF),
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(width: 1.16, color: Color(0xCCFFFFFF)),
+            borderRadius: BorderRadius.circular(24),
           ),
-          const SizedBox(width: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Nama Pengguna',
-                style: GoogleFonts.instrumentSans(
-                  color: const Color(0xFF1A2E35),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
+          shadows: const [
+            BoxShadow(
+              color: Color(0x0C000000),
+              blurRadius: 6,
+              offset: Offset(0, 4),
+              spreadRadius: 0,
+            )
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 64,
+              height: 64,
+              decoration: ShapeDecoration(
+                color: const Color(0xFFE0EBF0),
+                shape: RoundedRectangleBorder(
+                  side:
+                      const BorderSide(width: 1.16, color: Color(0x4C4ADEDE)),
+                  borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              const SizedBox(height: 4),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: ShapeDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment(0.50, 0.00),
-                    end: Alignment(0.50, 1.00),
-                    colors: [Color(0x334ADEDE), Color(0x33A3E42F)],
-                  ),
-                  shape: RoundedRectangleBorder(
-                    side:
-                        const BorderSide(width: 1.16, color: Color(0x4C4ADEDE)),
-                    borderRadius: BorderRadius.circular(38835400),
-                  ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: const Icon(
+                  Icons.person_outline,
+                  size: 40,
+                  color: Color(0x99192D34),
                 ),
-                child: Text(
-                  'Warga',
+              ),
+            ),
+            const SizedBox(width: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Nama Pengguna',
                   style: GoogleFonts.instrumentSans(
                     color: const Color(0xFF1A2E35),
-                    fontSize: 12,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-              ),
-              const SizedBox(height: 6),
-              Row(
-                children: [
-                  const Icon(Icons.location_on_outlined,
-                      color: Color(0x99192D34), size: 14),
-                  const SizedBox(width: 4),
-                  Text(
-                    'Gunungpati, Kota Semarang',
+                const SizedBox(height: 4),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: ShapeDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment(0.50, 0.00),
+                      end: Alignment(0.50, 1.00),
+                      colors: [Color(0x334ADEDE), Color(0x33A3E42F)],
+                    ),
+                    shape: RoundedRectangleBorder(
+                      side:
+                          const BorderSide(width: 1.16, color: Color(0x4C4ADEDE)),
+                      borderRadius: BorderRadius.circular(38835400),
+                    ),
+                  ),
+                  child: Text(
+                    'Warga',
                     style: GoogleFonts.instrumentSans(
-                      color: const Color(0x99192D34),
+                      color: const Color(0xFF1A2E35),
                       fontSize: 12,
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
-        ],
+                ),
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    const Icon(Icons.location_on_outlined,
+                        color: Color(0x99192D34), size: 14),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Gunungpati, Kota Semarang',
+                      style: GoogleFonts.instrumentSans(
+                        color: const Color(0x99192D34),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -333,8 +357,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         GestureDetector(
           onTap: () {
             HapticFeedback.lightImpact();
-            // TODO: Handle Emergency Button Tap
-            print("Tombol Darurat Ditekan!");
+            _navigateToFeature('SOS Emergency');
           },
           child: Container(
             width: double.infinity,
@@ -461,89 +484,95 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildWarningCard(WarningInfo warning) {
-    return Container(
-      padding: const EdgeInsets.all(17),
-      decoration: ShapeDecoration(
-        color: const Color(0xB2FFFFFF),
-        shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1.16, color: warning.borderColor),
-          borderRadius: BorderRadius.circular(16),
+    return GestureDetector(
+      onTap: () {
+         HapticFeedback.lightImpact();
+         _navigateToFeature('Detail Peringatan: ${warning.title}');
+      },
+      child: Container(
+        padding: const EdgeInsets.all(17),
+        decoration: ShapeDecoration(
+          color: const Color(0xB2FFFFFF),
+          shape: RoundedRectangleBorder(
+            side: BorderSide(width: 1.16, color: warning.borderColor),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          shadows: const [
+            BoxShadow(
+              color: Color(0x0C000000),
+              blurRadius: 4,
+              offset: Offset(0, 2),
+              spreadRadius: 0,
+            )
+          ],
         ),
-        shadows: const [
-          BoxShadow(
-            color: Color(0x0C000000),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-            spreadRadius: 0,
-          )
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: ShapeDecoration(
-              color: warning.iconBackgroundColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: ShapeDecoration(
+                color: warning.iconBackgroundColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+              child: Icon(warning.icon, color: const Color(0xFF1A2E35), size: 20),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        warning.title,
+                        style: GoogleFonts.instrumentSans(
+                          color: const Color(0xFF1A2E35),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        warning.timeAgo,
+                        style: GoogleFonts.instrumentSans(
+                          color: const Color(0x99192D34),
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    warning.description,
+                    style: GoogleFonts.instrumentSans(
+                      color: const Color(0xB2192D34),
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(Icons.location_on_outlined,
+                          color: Color(0x99192D34), size: 12),
+                      const SizedBox(width: 4),
+                      Text(
+                        warning.distance,
+                        style: GoogleFonts.instrumentSans(
+                          color: const Color(0x99192D34),
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            child: Icon(warning.icon, color: const Color(0xFF1A2E35), size: 20),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      warning.title,
-                      style: GoogleFonts.instrumentSans(
-                        color: const Color(0xFF1A2E35),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      warning.timeAgo,
-                      style: GoogleFonts.instrumentSans(
-                        color: const Color(0x99192D34),
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  warning.description,
-                  style: GoogleFonts.instrumentSans(
-                    color: const Color(0xB2192D34),
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.location_on_outlined,
-                        color: Color(0x99192D34), size: 12),
-                    const SizedBox(width: 4),
-                    Text(
-                      warning.distance,
-                      style: GoogleFonts.instrumentSans(
-                        color: const Color(0x99192D34),
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -568,7 +597,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           color: const Color(0xFF1A2E35),
           onTap: () {
             HapticFeedback.lightImpact();
-            // TODO: Navigate to Peta Laporan
+            _navigateToFeature('Peta Laporan');
           },
         ),
         const SizedBox(height: 8),
@@ -579,7 +608,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           color: const Color(0xFF1A2E35),
           onTap: () {
             HapticFeedback.lightImpact();
-            // TODO: Navigate to Pengaturan
+            _navigateToFeature('Pengaturan');
           },
         ),
         const SizedBox(height: 8),
@@ -590,7 +619,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           color: const Color(0xFFE7000B),
           onTap: () {
             HapticFeedback.lightImpact();
-            // TODO: Handle Logout
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const ChooseScreen()),
+              (route) => false,
+            );
           },
         ),
       ],
@@ -680,14 +713,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 icon: Icons.forum_outlined,
                 label: 'Forum',
                 isSelected: _selectedBottomNavIndex == 0,
-                onTap: () => setState(() => _selectedBottomNavIndex = 0),
+                onTap: () {
+                  setState(() => _selectedBottomNavIndex = 0);
+                  _navigateToFeature('Forum Warga');
+                }
               ),
               const SizedBox(width: 50),
               _buildBottomNavItem(
                 icon: Icons.assignment_outlined,
                 label: 'Reports',
                 isSelected: _selectedBottomNavIndex == 2,
-                onTap: () => setState(() => _selectedBottomNavIndex = 2),
+                onTap: () {
+                   setState(() => _selectedBottomNavIndex = 2);
+                   _navigateToFeature('Daftar Laporan');
+                }
               ),
             ],
           ),
